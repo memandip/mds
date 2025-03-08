@@ -29,6 +29,14 @@ void dequeue(){
     front++;
 }
 
+void peek(){
+    if(front == -1 || front > rear){
+        printf("Queue is empty\n");
+        return;
+    }
+    printf("Front element: %d\n", queue[front]);
+}
+
 int main(){
     enqueue(1);
     enqueue(2);
@@ -42,10 +50,12 @@ int main(){
     enqueue(8);
     enqueue(9);
     enqueue(10);
+    peek();
     dequeue();
     dequeue();
     dequeue();
     dequeue();
+    peek();
     dequeue();
     dequeue();
     enqueue(8);
