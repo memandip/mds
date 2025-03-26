@@ -1,14 +1,17 @@
 # Data Structures and Algorithms
 
 ## Student Information
+
 - **Name:** Mandip Chaudhary
 - **Roll No:** 17
 - **Subject:** Data Structure and Algorithms (MDS 502)
 
 ## Project Overview
+
 This repository contains programming exercises for the Data Structure and Algorithms (MDS 502) course. The exercises implement various data structures and algorithms in C programming language.
 
 ### Implemented Topics
+
 1. Memory Management (malloc, calloc, realloc)
 2. Stack Implementation
 3. Expression Evaluation
@@ -27,6 +30,7 @@ This repository contains programming exercises for the Data Structure and Algori
 6. Tower of Hanoi
 
 ### Files
+
 - `1-sum-average.c`: Memory management with dynamic array
 - `2-stack.c`: Stack implementation using array
 - `3-bracket-matching.c`: Program to check balanced brackets
