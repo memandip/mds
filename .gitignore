@@ -175,3 +175,5 @@ cython_debug/
 **/*.plist
 data-structures-and-algo/**/*.yml
 **/*.dSYM
+
+**/data/*
