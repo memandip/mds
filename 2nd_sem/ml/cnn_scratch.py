@@ -75,14 +75,39 @@ class PoolLayer:
 
         return output
 
+class FCLayer:
+    def __init__(self, input_size, output_size):
+        self.weights = np.random.randn(input_size, output_size)
+        self.biases = np.zeros((1, output_size))
+
+    def forward(self, X):
+        self.input = X
+        return np.dot(X, self.weights) + self.biases
+
+class CNN:
+    def __init__(self):
+        self.conv1 = ConvLayer(in_channels=1, out_channels=3, kernel_size=3)
+        self.pool1 = PoolLayer(kernel_size=2)
+        self.fc1 = FCLayer(input_size=3 * 4 * 4, output_size=10) # Adjusted input size
+
+    def forward(self, X):
+        # Convolution and pooling
+        x = self.conv1.forward(X)
+        x = self.pool1.forward(x)
+
+        # Flatten
+        x = x.reshape(x.shape[0], -1)
+
+        # Fully connected layer
+        x = self.fc1.forward(x)
+        return x
+
 if __name__ == '__main__':
     # Toy data
     X = np.random.randn(1, 1, 10, 10)  # 1 image, 1 channel, 10x10
-    conv = ConvLayer(in_channels=1, out_channels=3, kernel_size=3)
-    conv_output = conv.forward(X)
-    pool = PoolLayer(kernel_size=2)
-    pool_output = pool.forward(conv_output)
+    
+    cnn = CNN()
+    output = cnn.forward(X)
 
     print("Input shape:", X.shape)
-    print("After convolution shape:", conv_output.shape)
-    print("After pooling shape:", pool_output.shape)
+    print("Final output shape:", output.shape)
