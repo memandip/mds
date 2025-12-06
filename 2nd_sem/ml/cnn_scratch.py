@@ -43,10 +43,46 @@ class ConvLayer:
 
         return output
 
+class PoolLayer:
+    def __init__(self, kernel_size, stride=2):
+        self.kernel_size = kernel_size
+        self.stride = stride
+
+    def forward(self, X):
+        # Input dimensions
+        (batch_size, in_channels, in_height, in_width) = X.shape
+
+        # Output dimensions
+        out_height = (in_height - self.kernel_size) // self.stride + 1
+        out_width = (in_width - self.kernel_size) // self.stride + 1
+
+        # Initialize output
+        output = np.zeros((batch_size, in_channels, out_height, out_width))
+
+        # Perform pooling
+        for i in range(out_height):
+            for j in range(out_width):
+                h_start = i * self.stride
+                h_end = h_start + self.kernel_size
+                w_start = j * self.stride
+                w_end = w_start + self.kernel_size
+
+                # Slice the input
+                X_slice = X[:, :, h_start:h_end, w_start:w_end]
+
+                # Pool
+                output[:, :, i, j] = np.max(X_slice, axis=(2, 3))
+
+        return output
+
 if __name__ == '__main__':
     # Toy data
-    X = np.random.randn(1, 1, 5, 5)  # 1 image, 1 channel, 5x5
+    X = np.random.randn(1, 1, 10, 10)  # 1 image, 1 channel, 10x10
     conv = ConvLayer(in_channels=1, out_channels=3, kernel_size=3)
-    output = conv.forward(X)
+    conv_output = conv.forward(X)
+    pool = PoolLayer(kernel_size=2)
+    pool_output = pool.forward(conv_output)
+
     print("Input shape:", X.shape)
-    print("Output shape:", output.shape)
+    print("After convolution shape:", conv_output.shape)
+    print("After pooling shape:", pool_output.shape)
