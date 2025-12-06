@@ -76,28 +76,40 @@ class RNN:
         self.rnn_cell.W_hh -= learning_rate * d_W_hh
         self.rnn_cell.b_h -= learning_rate * d_b_h
 
-if __name__ == '__main__':
-    # Toy data
-    input_size = 10
-    hidden_size = 20
-    output_size = 5
-    seq_length = 5
-    batch_size = 1
+    def train(self, X, y, epochs, learning_rate):
+        for epoch in range(epochs):
+            # Forward pass
+            output = self.forward(X)
 
+            # Calculate loss (mean squared error)
+            loss = np.mean((output - y)**2)
+
+            # Backward pass
+            d_output = 2 * (output - y) / y.shape[0]
+            self.backward(d_output, learning_rate)
+
+            if epoch % 100 == 0:
+                print(f"Epoch {epoch}, Loss: {loss}")
+
+if __name__ == '__main__':
+    # Toy data: Predict the sum of a sequence
+    input_size = 1
+    hidden_size = 16
+    output_size = 1
+    seq_length = 5
+    
     # Create an RNN
     rnn = RNN(input_size, hidden_size, output_size)
 
-    # Input sequence and target
-    X = np.random.randn(batch_size, seq_length, input_size)
-    y = np.random.randn(batch_size, output_size)
+    # Generate a simple dataset
+    X = np.random.rand(100, seq_length, input_size)
+    y = np.sum(X, axis=1)
 
-    # Forward pass
-    output = rnn.forward(X)
+    # Train the RNN
+    rnn.train(X, y, epochs=1001, learning_rate=0.01)
 
-    # Backward pass (dummy gradient)
-    d_output = output - y
-    rnn.backward(d_output, learning_rate=0.01)
-
-    print("Input sequence shape:", X.shape)
-    print("Output shape:", output.shape)
-    print("Backward pass completed.")
+    # Test the trained network
+    test_X = np.array([[[0.1], [0.2], [0.3], [0.4], [0.5]]])
+    test_y = np.sum(test_X)
+    prediction = rnn.forward(test_X)
+    print(f"\nTest Input Sum: {test_y}, Prediction: {prediction[0][0]}")
